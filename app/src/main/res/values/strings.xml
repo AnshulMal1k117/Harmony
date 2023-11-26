@@ -20,5 +20,7 @@
     <string name="favourites_screen">Favourites</string>
     <string name="playlists_screen">Playlists</string>
     <string name="add_button">Add</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 
 </resources>
