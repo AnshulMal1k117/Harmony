@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="round_corners">
+        <item name="cornerSize">5%</item>
+    </style>
+    <style name="round_buttons">
+        <item name="cornerSize">100%</item>
+    </style>
+</resources>

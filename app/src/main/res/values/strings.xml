@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Harmony</string>
+    <string name="shuffle_button">Shuffle</string>
+    <string name="favourites_button">Favourites</string>
+    <string name="playlists_button">Playlists</string>
+    <string name="total_songs">Total Songs</string>
+    <string name="harmonic">Harmonic</string>
+    <string name="song_name">Song Name</string>
+    <string name="back_button">Back</string>
+    <string name="favourites_hollow_button">Favourites</string>
+    <string name="start_text_view">00:00</string>
+    <string name="end_text_view">00:00</string>
+    <string name="repeat_button">Repeat</string>
+    <string name="equalizer_button">Equalizer</string>
+    <string name="timer_button">Timer</string>
+    <string name="share_button">Share</string>
+    <string name="previous_button">Previous</string>
+    <string name="next_button">Next</string>
+    <string name="pause_button">Pause</string>
+    <string name="favourites_screen">Favourites</string>
+    <string name="playlists_screen">Playlists</string>
+    <string name="add_button">Add</string>
+
 </resources>
