@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,17 +18,28 @@ class MainActivity : AppCompatActivity() {
     //REMEMBER TO ADD PERMISSIONS FOR API LEVELS BELOW 33
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var toogle: ActionBarDrawerToggle
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Calling the function to check and ask permissions
         requestRuntimePermissions()
+
+        //Setting the main theme of the app
         setTheme(R.style.Base_Theme_Harmony)
+
+        //LayoutInflater is used to create a new View (or Layout) object from one of your xml layouts
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        //Initializing the toogle
-        toogle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
+        //setting the main activity ast he default screen
         setContentView(binding.root)
+
+        //Initializing the toggle
+        toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
+        binding.root.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //Shuffle Button
         binding.shuffleButton.setOnClickListener {
@@ -61,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Handling what happens if permissions are granted or denied
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -87,5 +100,11 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(
                         Manifest.permission.READ_MEDIA_IMAGES), 10)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item))
+            return true
+        return super.onOptionsItemSelected(item)
     }
 }
