@@ -3,6 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="170dp"
     android:padding="16dp"
-    android:background="@color/pastel_burgundy">
+    android:background="@color/pastel_burgundy"
+    android:orientation="vertical"
+    android:layout_marginTop="80dp">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingTop="20dp"
+        android:src="@drawable/harmony_splash_screen"
+        android:contentDescription="@string/app_icon"/>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_header_text"
+        android:textSize="20sp"
+        android:textColor="@color/white"/>
 </LinearLayout>

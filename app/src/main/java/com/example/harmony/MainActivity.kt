@@ -12,10 +12,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.content.ContextCompat
 import com.example.harmony.databinding.ActivityMainBinding
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
-    //REMEMBER TO ADD PERMISSIONS FOR API LEVELS BELOW 33
+    /* REMEMBER TO ADD PERMISSIONS FOR API LEVELS BELOW 33 */
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         //setting the main activity ast he default screen
         setContentView(binding.root)
 
-        //Initializing the toggle
+        //Setting up the toggle
         toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
         binding.root.addDrawerListener(toggle)
         toggle.syncState()
@@ -55,6 +56,17 @@ class MainActivity : AppCompatActivity() {
         //Playlists button intent
         binding.playlistsButton.setOnClickListener {
             startActivity(Intent(this@MainActivity, PlaylistsActivity::class.java))
+        }
+
+        //Navigation Header intent
+        binding.navigationButton.setNavigationItemSelectedListener {
+            when (it.itemId){
+                R.id.nav_feedback -> Toast.makeText(baseContext, "Feedback", Toast.LENGTH_SHORT).show()
+                R.id.nav_settings -> Toast.makeText(baseContext, "Settings", Toast.LENGTH_SHORT).show()
+                R.id.nav_about -> Toast.makeText(baseContext, "About", Toast.LENGTH_SHORT).show()
+                R.id.nav_exit -> exitProcess(1)
+            }
+            true
         }
     }
 
