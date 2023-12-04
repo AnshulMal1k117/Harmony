@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/harmony_logo_round"
         android:supportsRtl="true"
-        android:theme="@style/splash_screen"
+        android:theme="@style/Splash.Screen.Theme"
         tools:targetApi="31">
         <activity
             android:name=".PlaylistsActivity"

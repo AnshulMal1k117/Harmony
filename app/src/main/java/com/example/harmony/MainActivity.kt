@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         //Calling the function to check and ask permissions
         requestRuntimePermissions()
 
-        //Setting the main theme of the app
-        setTheme(R.style.Base_Theme_Harmony)
+        //Setting the main theme of the app to Navigation Drawer Theme with action bar
+        setTheme(R.style.Navigation_Drawer_Theme)
 
         //LayoutInflater is used to create a new View (or Layout) object from one of your xml layouts
         binding = ActivityMainBinding.inflate(layoutInflater)
