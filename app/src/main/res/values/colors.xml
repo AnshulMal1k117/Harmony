@@ -3,11 +3,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!--Custom-->
-    <color name="umes_burgundy">#651D32</color>
-    <color name="pastel_burgundy">#974C5E</color>
-    <color name="faded_burgundy">#6A3940</color>
-    <color name="intense_burgundy">#521727</color>
+<!--    Custom colors before using material design-->
+<!--    <color name="umes_burgundy">#651D32</color>-->
+<!--    <color name="pastel_burgundy">#974C5E</color>-->
+<!--    <color name="faded_burgundy">#6A3940</color>-->
+<!--    <color name="intense_burgundy">#521727</color>-->
 
     <!--Material Design Theme colors-->
     <color name="seed">#651D32</color>
