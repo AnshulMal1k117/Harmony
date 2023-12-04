@@ -27,9 +27,10 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/shuffle_button"
                 android:drawableTop="@drawable/shuffle_icon"
+                android:drawableTint="?attr/colorPrimary"
                 android:text="@string/shuffle_button"
                 android:textAllCaps="false"
-                android:textColor="@color/black" />
+                android:textColor="?attr/colorOnBackground" />
 
             <Button
                 android:id="@+id/favourites_button"
@@ -39,9 +40,10 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/favourites_button"
                 android:drawableTop="@drawable/favourites_icon"
+                android:drawableTint="?attr/colorPrimary"
                 android:text="@string/favourites_button"
                 android:textAllCaps="false"
-                android:textColor="@color/black" />
+                android:textColor="?attr/colorOnBackground" />
 
             <Button
                 android:id="@+id/playlists_button"
@@ -51,9 +53,10 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/playlists_button"
                 android:drawableTop="@drawable/playlists_icon"
+                android:drawableTint="?attr/colorPrimary"
                 android:text="@string/playlists_button"
                 android:textAllCaps="false"
-                android:textColor="@color/black" />
+                android:textColor="?attr/colorOnBackground" />
 
         </LinearLayout>
 
@@ -62,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/total_songs"
-            android:textColor="@color/black" />
+            android:textColor="?attr/colorOnBackground" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

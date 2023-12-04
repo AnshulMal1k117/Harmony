@@ -9,7 +9,7 @@
     <color name="faded_burgundy">#6A3940</color>
     <color name="intense_burgundy">#521727</color>
 
-    <!--Light Mode Theme colors-->
+    <!--Material Design Theme colors-->
     <color name="seed">#651D32</color>
     <color name="md_theme_light_primary">#9A4057</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>

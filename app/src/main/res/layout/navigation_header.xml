@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="170dp"
     android:padding="16dp"
-    android:background="@color/pastel_burgundy"
+    android:background="?attr/colorTertiaryContainer"
     android:orientation="vertical"
     android:layout_marginTop="80dp">
 
@@ -19,5 +19,5 @@
         android:layout_height="wrap_content"
         android:text="@string/nav_header_text"
         android:textSize="20sp"
-        android:textColor="@color/white"/>
+        android:textColor="?attr/colorOnTertiaryContainer"/>
 </LinearLayout>
