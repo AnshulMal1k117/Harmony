@@ -28,5 +28,6 @@
     <string name="nav_settings_button">Settings</string>
     <string name="nav_about_button">About</string>
     <string name="nav_exit_button">Exit</string>
+    <string name="song_album">Song Album</string>
 
 </resources>
