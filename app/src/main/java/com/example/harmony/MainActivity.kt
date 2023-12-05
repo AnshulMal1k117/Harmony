@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.harmony.adapter.MusicAdapter
 import com.example.harmony.databinding.ActivityMainBinding
 import kotlin.system.exitProcess
 
@@ -20,27 +22,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var musicAdapter: MusicAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //Calling the function to check and ask permissions
-        requestRuntimePermissions()
-
-        //Setting the main theme of the app to Navigation Drawer Theme with action bar
-        setTheme(R.style.Navigation_Drawer_Theme)
-
-        //LayoutInflater is used to create a new View (or Layout) object from one of your xml layouts
-        binding = ActivityMainBinding.inflate(layoutInflater)
-
-        //setting the main activity ast he default screen
-        setContentView(binding.root)
-
-        //Setting up the toggle
-        toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
-        binding.root.addDrawerListener(toggle)
-        toggle.syncState()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        initializeLayout()
 
         //Shuffle Button
         binding.shuffleButton.setOnClickListener {
@@ -72,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     //To request permissions
     private fun requestRuntimePermissions() {
+
         if (checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
             !=PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
@@ -118,5 +105,39 @@ class MainActivity : AppCompatActivity() {
         if (toggle.onOptionsItemSelected(item))
             return true
         return super.onOptionsItemSelected(item)
+    }
+
+    //Function to initialize layout
+    private fun initializeLayout(){
+        //Calling the function to check and ask permissions
+        requestRuntimePermissions()
+
+        //Setting the main theme of the app to Navigation Drawer Theme with action bar
+        setTheme(R.style.Navigation_Drawer_Theme)
+
+        //LayoutInflater is used to create a new View (or Layout) object from one of your xml layouts
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        //setting the main activity ast he default screen
+        setContentView(binding.root)
+
+        //Setting up the toggle
+        toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
+        binding.root.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val musicList = ArrayList<String>()
+        musicList.add("first song")
+        musicList.add("second song")
+        musicList.add("third song")
+        musicList.add("fourth song")
+        musicList.add("fifth song")
+        binding.musicRecyclerView.setHasFixedSize(true)
+        binding.musicRecyclerView.setItemViewCacheSize(10)
+        binding.musicRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+        musicAdapter = MusicAdapter(this@MainActivity, musicList)
+        binding.musicRecyclerView.adapter = musicAdapter
+        binding.totalSongs.text = "Total Songs "+musicAdapter.itemCount
+
     }
 }
