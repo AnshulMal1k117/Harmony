@@ -1,16 +1,15 @@
 package com.example.harmony
 
-import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.checkSelfPermission
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.harmony.adapter.MusicAdapter
 import com.example.harmony.databinding.ActivityMainBinding
@@ -18,7 +17,8 @@ import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
-    /* REMEMBER TO ADD PERMISSIONS FOR API LEVELS BELOW 33 */
+    /* REMEMBER TO ADD PERMISSIONS FOR API LEVELS BELOW 33
+    * Added support for api below 33 */
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
@@ -26,7 +26,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeLayout()
+
+        if(requestRuntimePermissions()) {
+            initializeLayout()
+        }
 
         //Shuffle Button
         binding.shuffleButton.setOnClickListener {
@@ -56,48 +59,80 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //To request permissions
-    private fun requestRuntimePermissions() {
+    //To request permissions deprecated, were for android 13 or above only
+//    private fun requestRuntimePermissions() {
+//
+//        if (checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
+//            !=PackageManager.PERMISSION_GRANTED
+//            && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+//            !=PackageManager.PERMISSION_GRANTED)
+//        {
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(
+//                    Manifest.permission.READ_MEDIA_AUDIO,
+//                    Manifest.permission.READ_MEDIA_IMAGES), 10)
+//        }
+//    }
+//
+//    //Handling what happens if permissions are granted or denied
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == 10) {
+//
+//            //Checking Permission for audio access
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+//                Toast.makeText(this, "Audio Access Granted", Toast.LENGTH_SHORT).show()
+//            else
+//                ActivityCompat.requestPermissions(
+//                    this,
+//                    arrayOf(
+//                        Manifest.permission.READ_MEDIA_AUDIO), 10)
+//
+//            //Checking Permission for image access
+//            if (grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+//                Toast.makeText(this, "Image Access Granted", Toast.LENGTH_SHORT).show()
+//            else
+//                ActivityCompat.requestPermissions(
+//                    this,
+//                    arrayOf(
+//                        Manifest.permission.READ_MEDIA_IMAGES), 10)
+//        }
+//    }
 
-        if (checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
-            !=PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
-            !=PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.READ_MEDIA_AUDIO,
-                    Manifest.permission.READ_MEDIA_IMAGES), 10)
+    private fun requestRuntimePermissions() :Boolean{
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 13)
+                return false
+            }
         }
+        //android 13 permission request
+        else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU){
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_MEDIA_AUDIO), 13)
+                return false
+            }
+        }
+        return true
     }
 
-    //Handling what happens if permissions are granted or denied
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 10) {
-
-            //Checking Permission for audio access
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                Toast.makeText(this, "Audio Access Granted", Toast.LENGTH_SHORT).show()
+        if(requestCode == 13){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Permission Granted",Toast.LENGTH_SHORT).show()
+                initializeLayout()
+            }
             else
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(
-                        Manifest.permission.READ_MEDIA_AUDIO), 10)
-
-            //Checking Permission for image access
-            if (grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED)
-                Toast.makeText(this, "Image Access Granted", Toast.LENGTH_SHORT).show()
-            else
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(
-                        Manifest.permission.READ_MEDIA_IMAGES), 10)
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 13)
         }
     }
 
@@ -137,7 +172,8 @@ class MainActivity : AppCompatActivity() {
         binding.musicRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         musicAdapter = MusicAdapter(this@MainActivity, musicList)
         binding.musicRecyclerView.adapter = musicAdapter
-        binding.totalSongs.text = "Total Songs "+musicAdapter.itemCount
+        val totalSongs:String = "Total Songs: " +musicAdapter.itemCount
+        binding.totalSongs.text = totalSongs
 
     }
 }
