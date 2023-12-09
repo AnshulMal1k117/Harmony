@@ -4,9 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.harmony.data.Music
 import com.example.harmony.databinding.MusicViewBinding
 
-class MusicAdapter(private val context: Context, private val musicList: ArrayList<String>):RecyclerView.Adapter<MusicAdapter.MusicHolder>() {
+class MusicAdapter(private val context: Context, private val musicList: ArrayList<Music>):RecyclerView.Adapter<MusicAdapter.MusicHolder>() {
     class MusicHolder(binding: MusicViewBinding):RecyclerView.ViewHolder(binding.root) {
         val title = binding.songNameMusicView
         val album = binding.albumNameMusicView
@@ -19,7 +20,9 @@ class MusicAdapter(private val context: Context, private val musicList: ArrayLis
     }
 
     override fun onBindViewHolder(holder: MusicAdapter.MusicHolder, position: Int) {
-        holder.title.text = musicList[position]
+        holder.title.text = musicList[position].title
+        holder.album.text = musicList[position].album
+        holder.duration.text = musicList[position].duration.toString()
     }
 
     override fun getItemCount(): Int {
