@@ -1,9 +1,11 @@
 package com.example.harmony
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -12,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.harmony.adapter.MusicAdapter
+import com.example.harmony.data.Music
 import com.example.harmony.databinding.ActivityMainBinding
+import java.io.File
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +27,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var musicAdapter: MusicAdapter
+
+    companion object {
+        lateinit var MusicListMainActivity: ArrayList<Music>
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,50 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //To request permissions deprecated, were for android 13 or above only
-//    private fun requestRuntimePermissions() {
-//
-//        if (checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
-//            !=PackageManager.PERMISSION_GRANTED
-//            && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
-//            !=PackageManager.PERMISSION_GRANTED)
-//        {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(
-//                    Manifest.permission.READ_MEDIA_AUDIO,
-//                    Manifest.permission.READ_MEDIA_IMAGES), 10)
-//        }
-//    }
-//
-//    //Handling what happens if permissions are granted or denied
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == 10) {
-//
-//            //Checking Permission for audio access
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-//                Toast.makeText(this, "Audio Access Granted", Toast.LENGTH_SHORT).show()
-//            else
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(
-//                        Manifest.permission.READ_MEDIA_AUDIO), 10)
-//
-//            //Checking Permission for image access
-//            if (grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED)
-//                Toast.makeText(this, "Image Access Granted", Toast.LENGTH_SHORT).show()
-//            else
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(
-//                        Manifest.permission.READ_MEDIA_IMAGES), 10)
-//        }
-//    }
+
 
     private fun requestRuntimePermissions() :Boolean{
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
@@ -161,19 +126,46 @@ class MainActivity : AppCompatActivity() {
         binding.root.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val musicList = ArrayList<String>()
-        musicList.add("first song")
-        musicList.add("second song")
-        musicList.add("third song")
-        musicList.add("fourth song")
-        musicList.add("fifth song")
+        MusicListMainActivity = getAllAudio()
         binding.musicRecyclerView.setHasFixedSize(true)
         binding.musicRecyclerView.setItemViewCacheSize(10)
         binding.musicRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-        musicAdapter = MusicAdapter(this@MainActivity, musicList)
+        musicAdapter = MusicAdapter(this@MainActivity, MusicListMainActivity)
         binding.musicRecyclerView.adapter = musicAdapter
         val totalSongs:String = "Total Songs: " +musicAdapter.itemCount
         binding.totalSongs.text = totalSongs
 
+    }
+
+    //Function to get the audio files in the player
+    @SuppressLint("Recycle", "Range")
+    private fun getAllAudio(): ArrayList<Music> {
+        val tempList = ArrayList<Music>()
+        val selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0"
+        val projection = arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATE_ADDED,
+            MediaStore.Audio.Media.DATA)
+        val cursor = this.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection,
+            null, MediaStore.Audio.Media.DATE_ADDED + " DESC", null)
+        if (cursor != null){
+            if (cursor.moveToFirst()) {
+                do {
+                    //suppressed range with annotation
+                    val titleCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
+                    val idCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
+                    val albumCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
+                    val artistCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                    val pathCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
+                    val durationCursor = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                    val music = Music(id = idCursor, title = titleCursor, album = albumCursor,
+                        artist = artistCursor, path = pathCursor, duration = durationCursor)
+                    val file = File(music.path)
+                    if (file.exists())
+                        tempList.add(music)
+                } while (cursor.moveToNext())
+            }
+                cursor.close()
+        }
+        return tempList
     }
 }
