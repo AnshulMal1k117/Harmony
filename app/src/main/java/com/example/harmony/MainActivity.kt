@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //Function to get the audio files in the player
+    //Function to get the audio files in the player using cursor
     @SuppressLint("Recycle", "Range")
     private fun getAllAudio(): ArrayList<Music> {
         val tempList = ArrayList<Music>()
