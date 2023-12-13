@@ -22,8 +22,8 @@ import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
-    /* REMEMBER TO ADD PERMISSIONS FOR API LEVELS BELOW 33
-    * Added support for api below 33 */
+    /*ADD PERMISSIONS FOR API LEVELS BELOW 33-: Done
+    * FIX THE BUG IN SPLASH SCREEN ON LOWER API LEVELS */
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
