@@ -28,6 +28,8 @@ class PlayerActivity : AppCompatActivity() {
                 if(mediaPlayer == null) mediaPlayer = MediaPlayer()
                 mediaPlayer!!.reset()
                 mediaPlayer!!.setDataSource(musicListPlayerActivity[songPosition].path)
+                mediaPlayer!!.prepare()
+                mediaPlayer!!.start()
             }
         }
 
