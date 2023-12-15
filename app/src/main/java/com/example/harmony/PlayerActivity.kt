@@ -95,6 +95,7 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    //Setting the song positions such that previous button on first song leads to last and vice versa
     private fun setSongPosition(increase: Boolean){
         if (increase) {
             if (musicListPlayerActivity.size -1 == songPosition)
