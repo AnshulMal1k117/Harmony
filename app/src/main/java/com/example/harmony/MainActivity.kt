@@ -23,7 +23,9 @@ import kotlin.system.exitProcess
 class MainActivity : AppCompatActivity() {
 
     /*ADD PERMISSIONS FOR API LEVELS BELOW 33-: Done
-    * FIX THE BUG IN SPLASH SCREEN ON LOWER API LEVELS */
+    * FIX THE BUG IN SPLASH SCREEN ON LOWER API LEVELS
+    * FIXED A BUG WHERE THE APP WOULD CRASH BECAUSE THE CODE TO LOAD MUSIC EXECUTED BEFORE PERMISSIONS WERE GRANTED
+    * FIXED ANOTHER BUG IN getAllAudio() WHERE SOME title, iD, album or artist WOULD RETURN NULL, USING ELVIS OPERATOR  */
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
@@ -35,6 +37,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Setting the main theme of the app to Navigation Drawer Theme with action bar
+        setTheme(R.style.Navigation_Drawer_Theme)
+
+        //LayoutInflater is used to create a new View (or Layout) object from one of your xml layouts
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        //setting the main activity ast he default screen
+        setContentView(binding.root)
+
+        //Setting up the toggle
+        toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
+        binding.root.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if(requestRuntimePermissions()) {
             initializeLayout()
@@ -110,23 +127,6 @@ class MainActivity : AppCompatActivity() {
 
     //Function to initialize layout
     private fun initializeLayout(){
-        //Calling the function to check and ask permissions
-        requestRuntimePermissions()
-
-        //Setting the main theme of the app to Navigation Drawer Theme with action bar
-        setTheme(R.style.Navigation_Drawer_Theme)
-
-        //LayoutInflater is used to create a new View (or Layout) object from one of your xml layouts
-        binding = ActivityMainBinding.inflate(layoutInflater)
-
-        //setting the main activity ast he default screen
-        setContentView(binding.root)
-
-        //Setting up the toggle
-        toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
-        binding.root.addDrawerListener(toggle)
-        toggle.syncState()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         MusicListMainActivity = getAllAudio()
         binding.musicRecyclerView.setHasFixedSize(true)
         binding.musicRecyclerView.setItemViewCacheSize(10)
@@ -146,16 +146,16 @@ class MainActivity : AppCompatActivity() {
         val projection = arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATE_ADDED,
             MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID)
-        val cursor = this.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection,
-            null, MediaStore.Audio.Media.DATE_ADDED + " DESC", null)
+        val cursor = this.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection
+            , null, MediaStore.Audio.Media.DATE_ADDED + " DESC", null)
         if (cursor != null){
             if (cursor.moveToFirst()) {
                 do {
                     //suppressed range with annotation
-                    val titleCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
-                    val idCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
-                    val albumCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
-                    val artistCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                    val titleCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))?:"Unknown"
+                    val idCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID))?:"Unknown"
+                    val albumCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))?:"Unknown"
+                    val artistCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))?:"Unknown"
                     val pathCursor = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
                     val durationCursor = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                     val albumIDCursor= cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)).toString()
@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                         tempList.add(music)
                 } while (cursor.moveToNext())
             }
-                cursor.close()
+            cursor.close()
         }
         return tempList
     }
