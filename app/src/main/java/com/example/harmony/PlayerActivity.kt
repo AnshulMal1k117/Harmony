@@ -28,6 +28,8 @@ class PlayerActivity : AppCompatActivity() {
             if(isPlaying) pauseMusic()
             else playMusic()
         }
+        binding.previousButtonPlayerActivity.setOnClickListener { songChange(clickNext = false) }
+        binding.nextButtonPlayerActivity.setOnClickListener { songChange(clickNext = true) }
     }
 
     //Function to set current song name and image
@@ -77,5 +79,32 @@ class PlayerActivity : AppCompatActivity() {
         binding.playPauseButtonPlayerActivity.setIconResource(R.drawable.play_icon)
         isPlaying = false
         mediaPlayer!!.pause()
+    }
+
+    //Previous and next button functionality
+    private fun songChange(clickNext: Boolean) {
+        if(clickNext) {
+            setSongPosition(increase = true)
+            setLayout()
+            createMediaPlayer()
+        }
+        else {
+            setSongPosition(increase = false)
+            setLayout()
+            createMediaPlayer()
+        }
+    }
+
+    private fun setSongPosition(increase: Boolean){
+        if (increase) {
+            if (musicListPlayerActivity.size -1 == songPosition)
+                songPosition = 0
+            else ++songPosition
+        }
+        else {
+            if (0 == songPosition)
+                songPosition = musicListPlayerActivity.size -1
+            else --songPosition
+        }
     }
 }

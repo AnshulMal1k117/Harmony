@@ -115,6 +115,7 @@
         android:layout_weight="1">
         
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/previous_button_player_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:icon="@drawable/previous_icon"
@@ -137,6 +138,7 @@
             android:contentDescription="@string/pause_button"/>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/next_button_player_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:icon="@drawable/next_icon"
