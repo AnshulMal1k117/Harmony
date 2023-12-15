@@ -50,6 +50,7 @@
 
     <!--Cover art shapeable image view-->
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/song_image_player_activity"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginTop="30dp"
@@ -59,6 +60,7 @@
 
     <!--Song Name-->
     <TextView
+        android:id="@+id/song_name_player_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -123,6 +125,7 @@
             android:contentDescription="@string/previous_button"/>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/play_pause_button_player_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:icon="@drawable/pause_icon"
