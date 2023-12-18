@@ -1,7 +1,8 @@
-package com.example.harmony
+package com.example.harmony.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.harmony.R
 import com.example.harmony.databinding.ActivityPlaylistsBinding
 
 class PlaylistsActivity : AppCompatActivity() {

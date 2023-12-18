@@ -1,10 +1,12 @@
-package com.example.harmony
+package com.example.harmony.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.harmony.MainActivity
+import com.example.harmony.R
 import com.example.harmony.data.Music
 import com.example.harmony.databinding.ActivityPlayerBinding
 

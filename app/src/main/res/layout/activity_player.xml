@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PlayerActivity"
+    tools:context=".ui.PlayerActivity"
     android:gravity="center">
 
     <!--Back button, top text and favourite button-->

@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.harmony.PlayerActivity
+import com.example.harmony.ui.PlayerActivity
 import com.example.harmony.R
 import com.example.harmony.data.Music
 import com.example.harmony.data.formatDuration

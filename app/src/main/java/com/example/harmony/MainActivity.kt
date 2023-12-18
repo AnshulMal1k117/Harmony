@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.harmony.adapter.MusicAdapter
 import com.example.harmony.data.Music
 import com.example.harmony.databinding.ActivityMainBinding
+import com.example.harmony.ui.FavouritesActivity
+import com.example.harmony.ui.PlayerActivity
+import com.example.harmony.ui.PlaylistsActivity
 import java.io.File
 import kotlin.system.exitProcess
 
