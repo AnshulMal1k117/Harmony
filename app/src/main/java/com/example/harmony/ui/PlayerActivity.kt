@@ -1,7 +1,11 @@
 package com.example.harmony.ui
 
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -9,14 +13,15 @@ import com.example.harmony.MainActivity
 import com.example.harmony.R
 import com.example.harmony.data.Music
 import com.example.harmony.databinding.ActivityPlayerBinding
+import com.example.harmony.service.MusicService
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity(), ServiceConnection {
 
     companion object{
         lateinit var musicListPlayerActivity: ArrayList<Music>
         var songPosition:Int = 0
-        var mediaPlayer: MediaPlayer? = null
         var isPlaying:Boolean = false
+        var musicService:MusicService? = null
     }
 
     private lateinit var binding: ActivityPlayerBinding
@@ -25,6 +30,12 @@ class PlayerActivity : AppCompatActivity() {
         setTheme(R.style.Base_Theme_Harmony)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //Starting the Service
+        val intent = Intent(this, MusicService::class.java)
+        bindService(intent, this, BIND_AUTO_CREATE)
+        startService(intent)
+
         initializeLayout()
         binding.playPauseButtonPlayerActivity.setOnClickListener{
             if(isPlaying) pauseMusic()
@@ -46,11 +57,11 @@ class PlayerActivity : AppCompatActivity() {
     //Function to create media player and handle exceptions
     private fun createMediaPlayer(){
         try {
-            if(mediaPlayer == null) mediaPlayer = MediaPlayer()
-            mediaPlayer!!.reset()
-            mediaPlayer!!.setDataSource(musicListPlayerActivity[songPosition].path)
-            mediaPlayer!!.prepare()
-            mediaPlayer!!.start()
+            if(musicService!!.mediaPlayer == null) musicService!!.mediaPlayer = MediaPlayer()
+            musicService!!.mediaPlayer!!.reset()
+            musicService!!.mediaPlayer!!.setDataSource(musicListPlayerActivity[songPosition].path)
+            musicService!!.mediaPlayer!!.prepare()
+            musicService!!.mediaPlayer!!.start()
             isPlaying = true
             binding.playPauseButtonPlayerActivity.setIconResource(R.drawable.pause_icon)
         }catch (e: Exception){return}
@@ -80,14 +91,14 @@ class PlayerActivity : AppCompatActivity() {
     private fun playMusic(){
         binding.playPauseButtonPlayerActivity.setIconResource(R.drawable.pause_icon)
         isPlaying = true
-        mediaPlayer!!.start()
+        musicService!!.mediaPlayer!!.start()
     }
 
     //Pause button functionality
     private fun pauseMusic(){
         binding.playPauseButtonPlayerActivity.setIconResource(R.drawable.play_icon)
         isPlaying = false
-        mediaPlayer!!.pause()
+        musicService!!.mediaPlayer!!.pause()
     }
 
     //Previous and next button functionality
@@ -95,12 +106,10 @@ class PlayerActivity : AppCompatActivity() {
         if(clickNext) {
             setSongPosition(increase = true)
             setLayout()
-            createMediaPlayer()
         }
         else {
             setSongPosition(increase = false)
             setLayout()
-            createMediaPlayer()
         }
     }
 
@@ -116,5 +125,15 @@ class PlayerActivity : AppCompatActivity() {
                 songPosition = musicListPlayerActivity.size -1
             else --songPosition
         }
+    }
+
+    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        val binder = service as MusicService.MyBinder
+        musicService = binder.currentService()
+        createMediaPlayer()
+    }
+
+    override fun onServiceDisconnected(name: ComponentName?) {
+        musicService = null
     }
 }
