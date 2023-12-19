@@ -30,7 +30,7 @@ class MusicService: Service() {
         val notification = NotificationCompat.Builder(baseContext, ApplicationClass.CHANNEL_ID)
             .setContentTitle(PlayerActivity.musicListPlayerActivity[PlayerActivity.songPosition].title)
             .setContentTitle(PlayerActivity.musicListPlayerActivity[PlayerActivity.songPosition].artist)
-            .setSmallIcon(R.drawable.playlists_icon)
+            .setSmallIcon(R.drawable.harmony_splash_screen)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.harmony_splash_screen))
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
