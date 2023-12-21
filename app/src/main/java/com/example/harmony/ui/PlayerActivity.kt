@@ -22,9 +22,9 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         var songPosition:Int = 0
         var isPlaying:Boolean = false
         var musicService:MusicService? = null
+        lateinit var binding: ActivityPlayerBinding
     }
 
-    private lateinit var binding: ActivityPlayerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Base_Theme_Harmony)
@@ -90,6 +90,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
     //Play button functionality
     private fun playMusic(){
         binding.playPauseButtonPlayerActivity.setIconResource(R.drawable.pause_icon)
+        musicService!!.showNotification(R.drawable.pause_notification)
         isPlaying = true
         musicService!!.mediaPlayer!!.start()
     }
@@ -97,6 +98,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
     //Pause button functionality
     private fun pauseMusic(){
         binding.playPauseButtonPlayerActivity.setIconResource(R.drawable.play_icon)
+        musicService!!.showNotification(R.drawable.play_notification)
         isPlaying = false
         musicService!!.mediaPlayer!!.pause()
     }
@@ -131,7 +133,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
-        musicService!!.showNotification()
+        musicService!!.showNotification(R.drawable.pause_notification)
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
