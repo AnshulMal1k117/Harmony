@@ -12,6 +12,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import com.example.harmony.MainActivity
 import com.example.harmony.R
+import com.example.harmony.data.getImageArt
 import com.example.harmony.ui.PlayerActivity
 
 class MusicService: Service() {
@@ -55,11 +56,18 @@ class MusicService: Service() {
         val exitPendingIntent = PendingIntent.getBroadcast(baseContext, 0,
             exitIntent, flag)
 
+        val imageArt = getImageArt(PlayerActivity.musicListPlayerActivity[PlayerActivity.songPosition].path)
+        val image = if (imageArt != null){
+            BitmapFactory.decodeByteArray(imageArt, 0, imageArt.size)
+        }else{
+            BitmapFactory.decodeResource(resources, R.drawable.harmony_splash_screen)
+        }
+
         val notification = NotificationCompat.Builder(baseContext, ApplicationClass.CHANNEL_ID)
             .setContentTitle(PlayerActivity.musicListPlayerActivity[PlayerActivity.songPosition].title)
             .setContentTitle(PlayerActivity.musicListPlayerActivity[PlayerActivity.songPosition].artist)
             .setSmallIcon(R.drawable.harmony_splash_screen)
-            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.harmony_splash_screen))
+            .setLargeIcon(image)
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
