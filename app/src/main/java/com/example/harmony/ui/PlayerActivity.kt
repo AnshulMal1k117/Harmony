@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.harmony.MainActivity
 import com.example.harmony.R
 import com.example.harmony.data.Music
+import com.example.harmony.data.setSongPosition
 import com.example.harmony.databinding.ActivityPlayerBinding
 import com.example.harmony.service.MusicService
 
@@ -64,6 +65,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
             musicService!!.mediaPlayer!!.start()
             isPlaying = true
             binding.playPauseButtonPlayerActivity.setIconResource(R.drawable.pause_icon)
+            musicService!!.showNotification(R.drawable.pause_notification)
         }catch (e: Exception){return}
     }
 
@@ -115,25 +117,10 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         }
     }
 
-    //Setting the song positions such that previous button on first song leads to last and vice versa
-    private fun setSongPosition(increase: Boolean){
-        if (increase) {
-            if (musicListPlayerActivity.size -1 == songPosition)
-                songPosition = 0
-            else ++songPosition
-        }
-        else {
-            if (0 == songPosition)
-                songPosition = musicListPlayerActivity.size -1
-            else --songPosition
-        }
-    }
-
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
-        musicService!!.showNotification(R.drawable.pause_notification)
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
