@@ -1,5 +1,6 @@
 package com.example.harmony.ui
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -23,6 +24,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         var songPosition:Int = 0
         var isPlaying:Boolean = false
         var musicService:MusicService? = null
+        @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivityPlayerBinding
     }
 
@@ -110,10 +112,12 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         if(clickNext) {
             setSongPosition(increase = true)
             setLayout()
+            createMediaPlayer()
         }
         else {
             setSongPosition(increase = false)
             setLayout()
+            createMediaPlayer()
         }
     }
 
